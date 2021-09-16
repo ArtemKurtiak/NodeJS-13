@@ -1,0 +1,376 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "NodeJS course API",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get users",
+        "operationId": "getUsers",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "FFF",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userItem"
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedErrorSchema"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Create user",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "FFF",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "description": "User email",
+            "default": "test@gmail.com",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "description": "User password",
+            "default": "Test123#",
+            "required": true
+          },
+          {
+            "name": "role",
+            "in": "formData",
+            "type": "string",
+            "description": "User role",
+            "default": "user",
+            "required": false
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Forbidden origin",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Forbidden"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedErrorSchema"
+            }
+          },
+          "409": {
+            "description": "Email already in use",
+            "schema": {
+              "$ref": "#/definitions/EmailAlreadyInUseErrorSchema"
+            }
+          },
+          "201": {
+            "description": "Success operation",
+            "schema": {
+              "$ref": "#/definitions/SuccessErrorSchema"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "get user",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "FFF",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "User id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFoundErrorSchema"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedErrorSchema"
+            }
+          },
+          "400": {
+            "description": "User id invalid",
+            "schema": {
+              "$ref": "#/definitions/userIdNotCorrectErrorSchema"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/userItem"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "FFF",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "User id",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "description": "User email",
+            "required": false
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "description": "User password",
+            "required": false
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFoundErrorSchema"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedErrorSchema"
+            }
+          },
+          "409": {
+            "description": "Email already in use",
+            "schema": {
+              "$ref": "#/definitions/EmailAlreadyInUseErrorSchema"
+            }
+          },
+          "403": {
+            "description": "You aren`t admin",
+            "schema": {
+              "$ref": "#/definitions/PermissionDeniedErrorSchema"
+            }
+          },
+          "400": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/userIdNotCorrectErrorSchema"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SuccessErrorSchema"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "FFF",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "User id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFoundErrorSchema"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedErrorSchema"
+            }
+          },
+          "403": {
+            "description": "You aren`t admin",
+            "schema": {
+              "$ref": "#/definitions/PermissionDeniedErrorSchema"
+            }
+          },
+          "400": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/userIdNotCorrectErrorSchema"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SuccessErrorSchema"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "userItem": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "User id",
+          "type": "string",
+          "example": "123321"
+        },
+        "email": {
+          "description": "User email",
+          "type": "string",
+          "example": "test@gmail.com"
+        },
+        "createdAt": {
+          "description": "Date when user was created",
+          "type": "string",
+          "example": "10.05.2021"
+        },
+        "updatedAt": {
+          "description": "Date when user was updated",
+          "type": "string",
+          "example": "10.09.2021"
+        }
+      }
+    },
+    "UnAuthorizedErrorSchema": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Invalid token"
+        }
+      }
+    },
+    "EmailAlreadyInUseErrorSchema": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Email already in use"
+        }
+      }
+    },
+    "UserNotFoundErrorSchema": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User not found"
+        }
+      }
+    },
+    "PermissionDeniedErrorSchema": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Permission denied"
+        }
+      }
+    },
+    "userIdNotCorrectErrorSchema": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User id invalid"
+        }
+      }
+    },
+    "SuccessErrorSchema": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Success operation"
+        }
+      }
+    }
+  }
+}
